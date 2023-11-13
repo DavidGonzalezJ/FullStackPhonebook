@@ -54,7 +54,6 @@ const App = () => {
       setPersons(response.data)
     })
   }
-
   useEffect(getListFromServer,[])
 
   const handleNameChange = (event) => {
@@ -87,9 +86,14 @@ const App = () => {
     if (found === undefined){
       const peep = {name : newName,
       number : newNumber}
-      setPersons(persons.concat(peep))
-      setNewName('')
-      setNewNumber('')
+      axios
+      .post('http://localhost:3001/persons', peep)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+        console.log('guardado ',response.data.name)
+      })
     }
     else{
       alert(`${newName} is already in the phonebook`)
