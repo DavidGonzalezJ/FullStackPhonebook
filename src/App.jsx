@@ -53,7 +53,7 @@ const App = () => {
   const getListFromServer = () => {
     personService.getAll().then(initialList => {
       setPersons(initialList)
-      console.log('got initial list!')
+      console.log('got list!')
     })
   }
   useEffect(getListFromServer,[])
@@ -97,9 +97,23 @@ const App = () => {
       })
     }
     else{
-      alert(`${newName} is already in the phonebook`)
-      setNewName('')
-      setNewNumber('')
+      if(window.confirm(`${newName} is already in the phonebook,
+       do you want to replace the old number with a new one?`)){
+        const peep = {name : newName, number : newNumber}
+        personService.update(found.id, peep)
+        .then(() => {
+          setNewName('')
+          setNewNumber('')
+          getListFromServer()
+          console.log('Number updated')
+        })
+      
+      }
+      else{
+        setNewName('')
+        setNewNumber('')
+        console.log('Number not updated')
+      }
     }
   }
 
