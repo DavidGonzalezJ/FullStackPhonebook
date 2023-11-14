@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": 2
@@ -31,14 +26,9 @@
       "id": 6
     },
     {
-      "name": "Houston Rocket",
-      "number": "558-5465411",
+      "name": "Barney Stinson",
+      "number": "45654-5556",
       "id": 7
-    },
-    {
-      "name": "Marvin Martian",
-      "number": "54654-546544",
-      "id": 8
     }
   ]
 }

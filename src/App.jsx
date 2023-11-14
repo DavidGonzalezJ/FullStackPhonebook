@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
-const NumberList = ({list}) =>{
+const NumberList = ({list,deleteHandler}) =>{
   return (
     <ul>
-      {list.map(person =><li key={person.name} >{person.name} {person.number}</li>)}
+      {list.map(person =><li 
+      key={person.name} >
+        {person.name} {person.number}
+        <button onClick={() => deleteHandler(person)}>delete</button>
+      </li>)}
     </ul>
   )
 }
@@ -89,7 +93,7 @@ const App = () => {
         setPersons(persons.concat(newOne))
         setNewName('')
         setNewNumber('')
-        console.log('guardado ',newOne.name)
+        console.log('saved ',newOne.name)
       })
     }
     else{
@@ -97,6 +101,19 @@ const App = () => {
       setNewName('')
       setNewNumber('')
     }
+  }
+
+  const handleDelete = (person) => {
+    if(window.confirm(`Do you want to delete ${person.name}?`)){
+      personService.deletePerson(person.id)
+      .then(() => {
+        const newList = persons.filter(p => p.id !== person.id)
+        setPersons(newList)
+        console.log(person.name, ' has been deleted')
+      })
+
+    }
+    else console.log(person.name, ' has NOT been deleted')
   }
 
   const listToShow = getFilteredList()
@@ -110,7 +127,8 @@ const App = () => {
       nameHandler={handleNameChange} numberHandler={handleNumberChange}
       submitHandler={handleSubmit}/>
       <h2>Numbers</h2>
-      <NumberList list={listToShow}/>
+      <NumberList list={listToShow}
+      deleteHandler={handleDelete}/>
     </div>
   )
 }

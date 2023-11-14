@@ -19,4 +19,11 @@ const update = (id, newObject) => {
     return request.then(response => response.data)
 }
 
-export default { getAll, create, update }
+//Deletes the person with the passed id
+const deletePerson = (id) => {
+    const request = axios.delete(`${baseUrl}/${id}`)
+    //returns true if its done propperly?
+    return request.then(response => response.data)
+}
+
+export default { getAll, create, update, deletePerson }
