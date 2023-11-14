@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 const NumberList = ({list}) =>{
   return (
@@ -47,11 +47,9 @@ const App = () => {
 
   //Asks the server for the necesary info (initial numbers)
   const getListFromServer = () => {
-    axios
-    .get('http://localhost:3001/persons')
-    .then(response => {
-      console.log('got it!')
-      setPersons(response.data)
+    personService.getAll().then(initialList => {
+      setPersons(initialList)
+      console.log('got initial list!')
     })
   }
   useEffect(getListFromServer,[])
@@ -86,13 +84,12 @@ const App = () => {
     if (found === undefined){
       const peep = {name : newName,
       number : newNumber}
-      axios
-      .post('http://localhost:3001/persons', peep)
-      .then(response => {
-        setPersons(persons.concat(response.data))
+      personService.create(peep)
+      .then(newOne => {
+        setPersons(persons.concat(newOne))
         setNewName('')
         setNewNumber('')
-        console.log('guardado ',response.data.name)
+        console.log('guardado ',newOne.name)
       })
     }
     else{
