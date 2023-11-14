@@ -1,6 +1,25 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
+const Notification = ({message}) => {
+  if(message === null) return null
+
+  const messageStyle = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+  return(
+    <div style={messageStyle}>
+      {message}
+    </div>
+  )
+}
+
 const NumberList = ({list,deleteHandler}) =>{
   return (
     <ul>
@@ -48,6 +67,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [msg, setMsg] = useState(null)
 
   //Asks the server for the necesary info (initial numbers)
   const getListFromServer = () => {
@@ -93,7 +113,10 @@ const App = () => {
         setPersons(persons.concat(newOne))
         setNewName('')
         setNewNumber('')
-        console.log('saved ',newOne.name)
+        setMsg(`${newOne.name} has been saved succesfully`)
+        setTimeout(() =>{
+          setMsg(null)
+        },5000)
       })
     }
     else{
@@ -105,9 +128,11 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           getListFromServer()
-          console.log('Number updated')
+          setMsg(`${peep.name}'s number has been updated succesfully`)
+          setTimeout(() =>{
+            setMsg(null)
+          },5000)
         })
-      
       }
       else{
         setNewName('')
@@ -135,6 +160,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={msg}/>
       <SearchFilter newFilter={newFilter} changeHandler={handleFilterChange}/>
       <h2>Add a new one</h2>
       <FormForAdding name={newName} number={newNumber} 
