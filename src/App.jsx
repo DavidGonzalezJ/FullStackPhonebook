@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
-const Notification = ({message}) => {
+const Notification = ({type,message}) => {
   if(message === null) return null
-
-  const messageStyle = {
+  let messageStyle = {
     color: 'green',
     background: 'lightgrey',
     fontSize: 20,
@@ -12,6 +11,9 @@ const Notification = ({message}) => {
     borderRadius: 5,
     padding: 10,
     marginBottom: 10
+  }
+  if (type === 'error'){
+    messageStyle.color = 'red'
   }
   return(
     <div style={messageStyle}>
@@ -68,6 +70,9 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [msg, setMsg] = useState(null)
+  //This variable is for changing the type of notification
+  //on the top of the page
+  const [notificationType, setNotifType] = useState('notification')
 
   //Asks the server for the necesary info (initial numbers)
   const getListFromServer = () => {
@@ -113,6 +118,7 @@ const App = () => {
         setPersons(persons.concat(newOne))
         setNewName('')
         setNewNumber('')
+        setNotifType('notification')
         setMsg(`${newOne.name} has been saved succesfully`)
         setTimeout(() =>{
           setMsg(null)
@@ -128,7 +134,18 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           getListFromServer()
+          setNotifType('notification')
           setMsg(`${peep.name}'s number has been updated succesfully`)
+          setTimeout(() =>{
+            setMsg(null)
+          },5000)
+        })
+        .catch(()=>{
+          setNewName('')
+          setNewNumber('')
+          setNotifType('error')
+          setMsg(`Information of ${peep.name} has already been removed from server`)
+          getListFromServer()
           setTimeout(() =>{
             setMsg(null)
           },5000)
@@ -160,7 +177,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={msg}/>
+      <Notification message={msg} type={notificationType}/>
       <SearchFilter newFilter={newFilter} changeHandler={handleFilterChange}/>
       <h2>Add a new one</h2>
       <FormForAdding name={newName} number={newNumber} 
