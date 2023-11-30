@@ -147,11 +147,12 @@ const App = () => {
             setMsg(null)
           },5000)
         })
-        .catch(()=>{
+        .catch(() =>{
           setNewName('')
           setNewNumber('')
           setNotifType('error')
-          setMsg(`Information of ${peep.name} has already been removed from server`)
+          setMsg(`Information of ${peep.name} has been removed from server
+          or number format is incorrect`)
           getListFromServer()
           setTimeout(() =>{
             setMsg(null)
