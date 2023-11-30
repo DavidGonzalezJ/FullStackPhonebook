@@ -124,6 +124,13 @@ const App = () => {
           setMsg(null)
         },5000)
       })
+      .catch(error =>{
+        setNotifType('error')
+        setMsg(`Person validation failed. Use the correct format.`)
+        setTimeout(() =>{
+          setMsg(null)
+        },5000)
+      })
     }
     else{
       if(window.confirm(`${newName} is already in the phonebook,
@@ -166,6 +173,13 @@ const App = () => {
         const newList = persons.filter(p => p.id !== person.id)
         setPersons(newList)
         console.log(person.name, ' has been deleted')
+      })
+      .catch(error =>{
+        setNotifType('error')
+        setMsg(`${error.response.data}`)
+        setTimeout(() =>{
+          setMsg(null)
+        },5000)
       })
 
     }
